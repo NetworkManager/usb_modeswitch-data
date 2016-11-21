@@ -139,7 +139,7 @@ ATTR{idVendor}=="057c", ATTR{idProduct}=="84ff", RUN+="usb_modeswitch '%b/%k'"
 # Axesstel Modems (w/ initial idProduct 0x0010)
 ATTR{idVendor}=="05c6", ATTR{idProduct}=="0010", RUN+="usb_modeswitch '%b/%k'"
 
-# Option GlobeTrotter GX0201, Older Option devices, AnyDATA devices, Bless UC165, Celot K-300 a.o., TechFaith Venus VT-18, Celot CT-680, Samsung SGH-Z810, Prolink P2000 CDMA, StrongRising device, Vertex Wireless 100 Series
+# Option GlobeTrotter GX0201, Older Option devices, AnyDATA devices, Bless UC165, Celot K-300 a.o., TechFaith Venus VT-18, Celot CT-680, Quirky Option devices, Samsung SGH-Z810, Prolink P2000 CDMA, StrongRising device, Vertex Wireless 100 Series
 ATTR{idVendor}=="05c6", ATTR{idProduct}=="1000", RUN+="usb_modeswitch '%b/%k'"
 
 # Various USB modems
