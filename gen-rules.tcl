@@ -20,7 +20,7 @@ if {[lindex $argv 0] == "--set-version" && [regexp {\d\d\d\d\d\d\d\d} [lindex $a
 	set version [lindex $argv 1]
 }
 
-set template {ATTR{idVendor}=="+##+", ATTR{idProduct}=="#++#", RUN+="usb_modeswitch '%b/%k'"}
+set template {ATTR{idVendor}=="+##+", ATTR{idProduct}=="#++#", TAG+="usb_modeswitch"}
 
 if {![file isdirectory usb_modeswitch.d]} {
 	puts "No \"usb_modeswitch.d\" subfolder found"
@@ -44,14 +44,10 @@ puts $wc {#
 #
 ACTION!="add|change", GOTO="modeswitch_rules_end"
 
-# Adds a symlink "gsmmodem[n]" to the lowest ttyUSB port with interrupt
-# transfer; checked against a list of known modems, or else no action
-KERNEL=="ttyUSB*", ATTRS{bNumConfigurations}=="*", PROGRAM="usb_modeswitch --symlink-name %p %s{idVendor} %s{idProduct} %E{PRODUCT}", SYMLINK+="%c"
-
 SUBSYSTEM!="usb", ACTION!="add",, GOTO="modeswitch_rules_end"
 
 # Generic entry for most Huawei devices, excluding Android phones
-ATTRS{idVendor}=="12d1", ATTRS{manufacturer}!="Android", ATTR{bInterfaceNumber}=="00", ATTR{bInterfaceClass}=="08", RUN+="usb_modeswitch '%b/%k'"}
+ATTRS{idVendor}=="12d1", ATTRS{manufacturer}!="Android", ATTR{bInterfaceNumber}=="00", ATTR{bInterfaceClass}=="08", TAG+="usb_modeswitch"}
 
 set vendorList ""
 set dvid ""
