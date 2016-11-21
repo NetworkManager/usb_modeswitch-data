@@ -1,0 +1,139 @@
+README for USB_ModeSwitch Data
+
+Almost all new and corrected device configurations since around 2012
+were collected and compiled by Lars Melin. Thank you!
+
+Without a well-maintained base of configuration info, usb_modeswitch
+would just be a useless blob of code. So:
+
+PLEASE REPORT NEW DEVICES !
+
+For up-to-date and detailed information (plus a friendly forum) visit
+http://www.draisberghof.de/usb_modeswitch
+
+
+
+This is a data package to complement the full release package of
+USB_ModeSwitch, a tool to switch multi-mode USB devices.
+It is used since usb-modeswitch version 1.0.3.
+
+Recommended version of usb-modeswitch package is 2.4.0 and above.
+
+
+Installation
+============
+
+Just run "make install". To re-generate udev rules file (Note: "tcl" 
+package required), type "make clean" and install again .
+
+
+Tasks initiated by the rules file:
+==================================
+
+- call tiny shell script in /lib/udev which in turn calls the wrapper
+  (/usr/sbin/usb_modeswitch_dispatcher) to initiate switching for known
+  devices when plugged in or present at boot time
+
+- adding symlink "gsmmodem" to appropriate connection port (out of 2-5
+  ports provided by some devices); this is only a convenience feature and
+  NOT needed for switching or later port operation.
+  This action will be triggered for known modems only (at least switched
+  once before on this system)
+
+
+Explanation about config file names:
+====================================
+
+Names consist of <VendorID>:<ProductID>, respective to the default device
+mode.
+Should more detailed identification become necessary, one or more attributes
+to test can be attached after further colons:
+<VendorID>:<ProductID>:<Attribute>=<String>[:<Attribute>=<String> ...]
+
+The strings match if they are part of the attribute content. Use "_"
+to match spaces (it will match "_" too!).
+
+Currently recognized attributes are:
+
+uMa = USB, iManufacturer
+uPr = USB, iProduct
+uSe = USB, iSerial
+sVe = SCSI, Vendor
+sMo = SCSI, Model
+sRe = SCSI, Revision
+
+This list is easily extendable should it be necessary.
+
+Example:
+<vid>:<pid>:uPr=CDMA_Mo will match iProduct "CDMA Modem" or "MyCDMA_Mordor"
+
+
+Generic config files (per vendor ID):
+=====================================
+
+Introduced in program package 2.2.0, this feature allows config files with a
+name in the form <idVendor>:#<system flavour>. The default flavour is "linux".
+
+The system parameter is taken from "/proc/version". The main use currently is
+a sort of OS switch to treat all Huawei devices differently on Android.
+There is no guarantee though that the /proc/version information will always
+point to Android, so this method may change in future versions.
+
+Annother form of usage is a fallback if the device ID is yet unknown. For
+Huawei devices, the switching method is uniform and not likely to change,
+so it is possible to provide a generic configuration.
+
+Example files: see "12d1:#android" and "12d1:#linux"
+
+
+Parameters used only in config files:
+=====================================
+
+These are not evaluated by the binary but by the wrapper.
+
+- WaitBefore=<seconds>		delay the switching process
+
+See also complete parameter explanation in REFERENCE.
+
+
+Notes about specific devices:
+=============================
+
+- Huawei devices have a generic entry in the rules file; also there are
+  generic config files for these devices (Linux/Android) as fall-back or
+  as OS-specific mode control. This was suggested and approved by the
+  manufacturer
+
+- 1266:1000 (Royaltek Q110): switching method very likely but unconfirmed
+
+- 05c6:2000 (unnamed HSDPA modem from "dealextreme"): unusually long switching
+  time reported, even with MS Windoze - 30 to 40 seconds. Don't be alarmed.
+
+- 0471:1210 (Philips chipset): had to be split after variants with different
+  targets and behaviour appeared. This is not fully confirmed yet, please
+  report problems.
+
+- 1004:6190 (LG AD600): seems to require an unusually wait before starting the
+  modeswitch (10 secs)
+
+
+Legal
+=====
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details:
+
+http://www.gnu.org/licenses/gpl.txt
+
+Or find it as the file COPYING in this folder.
+
+
+
+
+Last revised: 2016-08-03, Josua Dietze
